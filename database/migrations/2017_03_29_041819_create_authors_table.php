@@ -116,7 +116,6 @@ class CreateAuthorsTable extends Migration
         //certifications
         Schema::create('certifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('no');
             $table->string('title');
             $table->integer('user_id')->unsigned();
             $table->timestamps();

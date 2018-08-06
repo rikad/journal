@@ -14,6 +14,7 @@
         </div>
         <div class="modal-body">
           <p></p>
+          <p>Example : Ministry of National Education of the Republic of Indonesia Educators Certificate, No. 101104904181, issued on July 5, 2010</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
@@ -49,7 +50,6 @@
 				    <thead>
 				      <tr>
 				        <th>#</th>
-				        <th>No</th>
 				        <th>Title</th>
 				        <th style="display:none">Action</th>
 				      </tr>
@@ -64,7 +64,6 @@
 				        echo '<td>'.$i.'</td>';
 				    	$i++;
 						@endphp
-				        <td>{{ $value->no }}</td>
 				        <td>{{ $value->title }}</td>
 				        <td style="vertical-align: middle; display: none"><button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value->id }})"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete({{ $value->id }})"><span class="glyphicon glyphicon-remove"></span></button></td>
 				      </tr>
@@ -125,7 +124,6 @@
 		this.data = document.getElementById(table);
 		this.optionData = {};
 		this.inputName = {
-			no: {title:'No',type:'text'},
 			title: {title:'Title',type:'text'}
 		};
 		this.existsData = this.data.rows.length;

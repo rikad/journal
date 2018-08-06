@@ -26,7 +26,6 @@ class CertificationsController extends Controller
     public function validation() {
 
         $data = [
-            'no' => 'required|numeric',
             'title' => 'required',
         ];
 

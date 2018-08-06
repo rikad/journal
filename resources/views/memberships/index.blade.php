@@ -14,6 +14,12 @@
         </div>
         <div class="modal-body">
           <p></p>
+          <p>Example : 
+          <ul>
+          		<li>The Chemical Engineering Chapter of the Indonesian Institute of Engineers</li>
+          		<li>Asia Pacific Composite Society Represetatives for Indonesia</li>
+          </ul>
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>

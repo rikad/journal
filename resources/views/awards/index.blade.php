@@ -14,6 +14,12 @@
         </div>
         <div class="modal-body">
           <p></p>
+          <p>Example : 
+          <ul>
+          		<li>Best Enterpreneur Award – Achivement Association and Indonesian Professional Award (year - year)</li>
+          		<li>Best Enterpreneur Award – Achivement Association and Indonesian Professional Award (year)</li>
+          </ul>
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>

@@ -14,6 +14,12 @@
         </div>
         <div class="modal-body">
           <p></p>
+          <p>Example : 
+          <ul>
+          		<li>Coordinating & supervising undergraduate Chemical Technology laboratory courses</li>
+          		<li>Attending International Conference on Risk Technology and Management, 2007</li>
+          </ul>
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>

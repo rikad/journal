@@ -83,7 +83,7 @@ class ExperiencesController extends Controller
         }
 
         if(!is_numeric($data['organization_id']) && !is_null($data['organization_id'])) {
-            $new = Organization::firstOrCreate(['organization'=>$data['organization_id']],['form_id'=>0]);
+            $new = Organization::firstOrCreate(['organization'=>$data['organization_id']],['form_id'=>4]);
             $data['organization_id'] = $new->id;
         }
 
