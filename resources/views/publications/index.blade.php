@@ -50,6 +50,7 @@
 				      <tr>
 				        <th>#</th>
 				        <th>Title</th>
+				        <th>Additional Information</th>
 				        <th>Published</th>
 				        <th style="display:none">desciption</th>
 				        <th style="display:none">users</th>
@@ -69,6 +70,7 @@
 				    	$i++;
 						@endphp
 				        <td>{{ $value['title'] }}</td>
+				        <td>{{ $value['additional'] }}</td>
 				        <td>{{ $value['published'] }}</td>
 				        <td style="display:none">{{ $value['description'] }}</td>
 				        <td style="display:none">{!! $value['users'] !!}</td>
@@ -139,6 +141,7 @@
 		this.optionData = {};
 		this.inputName = {
 			title: {title:'Title',type:'text'},
+			additional: {title:'Additional Information', type:'text'},
 			published: {title:'Published On',type:'date'},
 			description: {title:'Short Description',type:'textarea'},
 			users: {title:'Select authors from users (* this publications will appear on their publications)',type:'multiselect'},

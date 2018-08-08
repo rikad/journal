@@ -41,7 +41,7 @@ class PublicationsController extends Controller
             }
             $relation = [ 'data' => $users];
 
-            $final[] =['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation) ];
+            $final[] =['id'=>$value->id,'title'=>$value->title,'additional'=>$value->additional,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation) ];
         }
 
         return View('publications.index', ['data'=>$final]);
