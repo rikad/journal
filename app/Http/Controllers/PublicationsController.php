@@ -62,7 +62,7 @@ class PublicationsController extends Controller
             'title' => 'required',
             'description' => 'required',
             'published' => 'required|date',
-            'file' => 'max:100000|mimes:doc,docx,pdf'
+            'file' => 'nullable|max:100000|mimes:doc,docx,pdf'
         ];
 
         return $data;
@@ -113,12 +113,18 @@ class PublicationsController extends Controller
 
         $validator = Validator::make($datawithfile, $this->validation());
         if ($validator->fails()) {
+            $failMessage = json_decode(json_encode($validator->messages()));
+            $message = '<ul>';
+            foreach ($failMessage as $key => $value) {
+              $message = $message. '<li>'.$value[0].'</li>';
+            }
+            $message = $message . '</ul>';
             Session::flash("flash_notification", [
                 "level"=>"danger",
-                "message"=>$validator->messages()
+                "message"=>$message
             ]);
 
-            return redirect()->action('PublicationsController@index');
+            return back();
         }
 
         if ($request->input('authors') != null) {
@@ -147,7 +153,7 @@ class PublicationsController extends Controller
             $publication->update($data);
 
             //aksi edit ke relasi
-            DB::table('publication_user')->where('publication_id',$publication->id)->delete();          
+            DB::table('publication_user')->where('publication_id',$publication->id)->delete();
             $relation = [ ['publication_id'=>$publication->id,'user_id'=>Auth::id()] ];
             foreach($data['users'] as $value) {
                 $relation[] = ['publication_id'=>$publication->id,'user_id'=>$value ];

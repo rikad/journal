@@ -5,7 +5,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -13,19 +13,19 @@
           <h4 class="modal-title">Membership in Professional Organizations</h4>
         </div>
         <div class="modal-body">
-          <p></p>
-          <p>Example : 
+          <form method="POST" action="/menu/memberships"> {{ csrf_field() }}
+            <p></p>
+          <p>Example :
           <ul>
           		<li>The Chemical Engineering Chapter of the Indonesian Institute of Engineers</li>
           		<li>Asia Pacific Composite Society Represetatives for Indonesia</li>
           </ul>
           </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
+          <input type="submit" class="form-control btn-primary" value="Save">
+        </form>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -46,6 +46,13 @@
 					<h2 class="panel-title">Update Membership in Professional Organizations Information</h2>
 				</div>
 				<div class="panel-body">
+
+          <div id="controlBtn" align="right">
+  					<button id="addBtn" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
+  					<button id="editBtn" class="btn btn-warning btn-sm" onclick="rikad.editMode(true)">Edit</button>
+  				</div>
+          <hr>
+
 @if (empty($data[0]))
 	<p>No one record found, click add to add record.</p>
 				<table id="maintable" style="display: none" class="table table-striped">
@@ -79,12 +86,6 @@
 						@endforeach
 				    </tbody>
 				</table>
-
-				<hr>
-				<div id="controlBtn" align="right">
-					<button id="addBtn" style="display:none" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
-					<button id="editBtn" class="btn btn-primary btn-sm" onclick="rikad.editMode(true)">Edit</button>
-				</div>
 
 				<hr>
 					<ul class="pager">
@@ -182,7 +183,7 @@
 				case 'select':
 					output = '<select class="js-selectize" name="'+name+'">'+ this.buildOption(name,value) +'</select>';
 				break;
-				case 'date': 
+				case 'date':
 					output = '<div class="input-group date" id="date"><input type="text" class="form-control" name="'+ name +'" value="'+ value +'" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div>';
 				break;
 				default: output = '<input type="text" class="form-control" name="'+ name +'" value="'+ value +'" />';
@@ -192,7 +193,7 @@
 
 		this.showModal = function (data,id) {
 			$('#myModal').modal();
-			var form = '<form method="POST" action="/menu/memberships"> {{ csrf_field() }} ';
+			var form = '';
 			form += '<input type="hidden" value="'+id+'" name="id">';
 			var i=0;
 			for(var input in this.inputName) {
@@ -202,8 +203,6 @@
 
 				i++;
 			}
-
-			form += '<div align="right"><button class="btn btn-primary btn-sm" onclick="rikad.sendSave(id)">Save</button></div>';
 
 			var content = $('#myModal').find('p')
 			content[0].innerHTML = form;
@@ -237,7 +236,7 @@
 	            	location.reload();
 	            },
 	            success: function() {
-	            	location.reload(); 
+	            	location.reload();
 	            }
 	    	});
 		}
@@ -266,7 +265,7 @@
 		}
 
 		this.actionMode = function(state) {
-			var rows = this.data.getElementsByTagName('tr'); 
+			var rows = this.data.getElementsByTagName('tr');
 			var mode = state ? 'block' : 'none';
 
 			for (var row=0; row < rows.length; row++) {
@@ -276,7 +275,7 @@
 				}
 				else {
 					var cells = rows[row].getElementsByTagName('td');
-					cells[cells.length -1].style.display = mode;					
+					cells[cells.length -1].style.display = mode;
 				}
 			}
 		}
@@ -293,4 +292,3 @@
 	@include('layouts._sidebarJS')
 
 @endsection
-

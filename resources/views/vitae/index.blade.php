@@ -5,7 +5,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -19,21 +19,17 @@
           <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>
 
 
 	<ul class="breadcrumb">
 		<li><a href="{{ url('/home') }}">Dashboard</a></li>
-		<li>Menu</li>
 		<li class="active">My Curriculum Vitae</li>
 	</ul>
 	<div class="row">
-		<div class="col-md-2">
-			@include('layouts._sidebar')
-		</div>
-		<div class="col-md-10">
+		<div class="col-md-12">
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -47,7 +43,7 @@
 				<p align="center">@if($data['role']->display_name) {{ $data['role']->display_name }} @else - @endif</p>
 
 				<table>
-					
+
 					<tr>
 						<td><b>Personal Data</b></td>
 						<td></td>

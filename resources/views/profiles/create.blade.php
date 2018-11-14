@@ -19,7 +19,16 @@
 				</div>
 				<div class="panel-body">
 					{!! Form::model($data, ['class'=>'form-horizontal']) !!}
-					@include('profiles._form')
+					<div class="row">
+						<div class="col-md-4" style="text-align: center">
+							<img class="img-responsive img-circle" src="https://www.w3schools.com/w3images/fjords.jpg" alt="foto">
+							<hr>
+							<button class="btn btn-primary btn-sm">Change Image</button>
+						</div>
+						<div class="col-md-8">
+							@include('profiles._form')
+						</div>
+					</div>
 					{!! Form::close() !!}
 
 

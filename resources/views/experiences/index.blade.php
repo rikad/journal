@@ -5,7 +5,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -13,13 +13,13 @@
           <h4 class="modal-title">Experiences</h4>
         </div>
         <div class="modal-body">
-          <p></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
+          <form method="POST" action="/menu/experiences"> {{ csrf_field() }}
+            <p></p>
+            <input type="submit" class="form-control btn-primary" value="Save">
+          </form>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -40,6 +40,12 @@
 					<h2 class="panel-title">Update Experiences Information</h2>
 				</div>
 				<div class="panel-body">
+
+          <div id="controlBtn" align="right">
+  					<button id="addBtn" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
+  					<button id="editBtn" class="btn btn-warning btn-sm" onclick="rikad.editMode(true)">Edit</button>
+  				</div>
+          <hr>
 
 				<h3>Academic Experiences</h3>
 				<hr>
@@ -74,7 +80,7 @@
 				        <td>{{ $value->organization }}</td>
 				        <td>{{ $value->start_date }}</td>
 				        <td>{{ $value->end_date }}</td>
-				        <td style="vertical-align: middle; display: none"><button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value->id }})"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete(this,{{ $value->id }})"><span class="glyphicon glyphicon-remove"></span></button></td>
+				        <td style="vertical-align: middle; display: none"><button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value->id }},1)"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete(this,{{ $value->id }})"><span class="glyphicon glyphicon-remove"></span></button></td>
 				      </tr>
 						@endforeach
 				    </tbody>
@@ -113,18 +119,11 @@
 				        <td>{{ $value->organization }}</td>
 				        <td>{{ $value->start_date }}</td>
 				        <td>{{ $value->end_date }}</td>
-				        <td style="vertical-align: middle; display: none"><button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value->id }})"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete({{ $value->id }})"><span class="glyphicon glyphicon-remove"></span></button></td>
+				        <td style="vertical-align: middle; display: none"><button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value->id }},0)"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete({{ $value->id }})"><span class="glyphicon glyphicon-remove"></span></button></td>
 				      </tr>
 						@endforeach
 				    </tbody>
 				</table>
-
-
-				<hr>
-				<div id="controlBtn" align="right">
-					<button id="addBtn" style="display:none" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
-					<button id="editBtn" class="btn btn-primary btn-sm" onclick="rikad.editMode(true)">Edit</button>
-				</div>
 
 				<hr>
 					<ul class="pager">
@@ -224,13 +223,19 @@
 				case 'list': output =   '<input list="'+name+'" class="form-control" name="'+name+'">';
 				break;
 				case 'boolean':
-					output = '<select class="form-control" name="'+name+'"><option value="1" selected="selected">Academic</option><option value="0">Non-Academic</option></select>';
+					output = '<select class="form-control boolean" name="'+name+'">';
+          if (value) {
+            output += '<option value="1" selected="selected">Academic</option><option value="0">Non-Academic</option>';
+          } else {
+            output += '<option value="1">Academic</option><option value="0" selected="selected">Non-Academic</option>';
+          }
+          output += '</select>';
 				break;
 
 				case 'select':
 					output = '<select class="js-selectize" name="'+name+'">'+ this.buildOption(name,value) +'</select>';
 				break;
-				case 'date': 
+				case 'date':
 					output = '<div class="input-group date" id="date"><input type="text" class="form-control" name="'+ name +'" value="'+ value +'" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div>';
 				break;
 				default: output = '<input type="text" class="form-control" name="'+ name +'" value="'+ value +'" />';
@@ -240,11 +245,10 @@
 
 		this.showModal = function (data,id) {
 			$('#myModal').modal();
-			var form = '<form method="POST" action="/menu/experiences"> {{ csrf_field() }} ';
+			var form = '';
 			form += '<input type="hidden" value="'+id+'" name="id">';
 			var i=0;
 			for(var input in this.inputName) {
-				if(this.inputName[input].type == 'boolean') { i++; }
 
 				form += this.inputName[input].title + '<br>'
 				form += data == null ? this.inputConstruct(input,this.inputName[input].type,'') : this.inputConstruct(input,this.inputName[input].type,data[i]);
@@ -252,9 +256,6 @@
 
 				i++;
 			}
-
-
-			form += '<div align="right"><button class="btn btn-primary btn-sm" onclick="rikad.sendSave(id)">Save</button></div>';
 
 			var content = $('#myModal').find('p')
 			content[0].innerHTML = form;
@@ -267,13 +268,16 @@
 		this.addRow = function () {
 			this.showModal(null,null);
 		}
-		this.edit = function(row,id) {
+
+		this.edit = function(row,id,type) {
 			var row = row.parentNode.parentNode.cells;
 
 			data = [];
 			for (var i = 1, lt = row.length; i < lt-1; i++) {
 				data.push(row[i].innerHTML);
 			}
+
+      data.splice(2,0,type);
 
 			this.showModal(data,id);
 		}
@@ -289,13 +293,13 @@
 	            	location.reload();
 	            },
 	            success: function() {
-	            	location.reload(); 
+	            	location.reload();
 	            }
 	    	});
 		}
 
 		this.deleteRow = function (row) {
-			var index = row.parentNode.parentNode.rowIndex;			
+			var index = row.parentNode.parentNode.rowIndex;
 			this.data.deleteRow(index);
 		}
 		this.deleteAllRows = function () {
@@ -309,7 +313,6 @@
 
 		this.editMode = function(state) {
 			if(state) {
-				document.getElementById("addBtn").style.display = 'inline';
 				var editBtn = document.getElementById("editBtn");
 				editBtn.innerHTML = 'Cancel';
 				editBtn.onclick = function () { rikad.editMode(false) };
@@ -320,7 +323,6 @@
 				nonAcademic.actionMode(true);
 			}
 			else {
-				document.getElementById("addBtn").style.display = 'none';
 				var editBtn = document.getElementById("editBtn");
 				editBtn.innerHTML = 'Edit';
 				editBtn.onclick = function () { rikad.editMode(true) };
@@ -333,7 +335,7 @@
 		}
 
 		this.actionMode = function(state) {
-			var rows = this.data.getElementsByTagName('tr'); 
+			var rows = this.data.getElementsByTagName('tr');
 			var mode = state ? 'block' : 'none';
 
 			for (var row=0; row < rows.length; row++) {
@@ -343,7 +345,7 @@
 				}
 				else {
 					var cells = rows[row].getElementsByTagName('td');
-					cells[cells.length -1].style.display = mode;					
+					cells[cells.length -1].style.display = mode;
 				}
 			}
 		}
@@ -362,4 +364,3 @@
 	@include('layouts._sidebarJS')
 
 @endsection
-

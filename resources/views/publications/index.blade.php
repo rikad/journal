@@ -5,7 +5,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -13,13 +13,13 @@
           <h4 class="modal-title">Key Publications & Presentations</h4>
         </div>
         <div class="modal-body">
-          <p></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
+          <form method="POST" action="/menu/publications"> {{ csrf_field() }}
+            <p></p>
+            <input type="submit" class="form-control btn-primary" value="Save">
+          </form>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -40,6 +40,13 @@
 					<h2 class="panel-title">Update Key Publications & Presentations Information</h2>
 				</div>
 				<div class="panel-body">
+
+          <div id="controlBtn" align="right">
+            <button id="addBtn" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
+            <button id="editBtn" class="btn btn-warning btn-sm" onclick="rikad.editMode(true)">Edit</button>
+          </div>
+          <hr>
+
 @if (empty($data[0]))
 	<p>No one record found, click add to add record.</p>
 				<table id="maintable" style="display: none" class="table table-striped">
@@ -79,12 +86,6 @@
 						@endforeach
 				    </tbody>
 				</table>
-
-				<hr>
-				<div id="controlBtn" align="right">
-					<button id="addBtn" style="display:none" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
-					<button id="editBtn" class="btn btn-primary btn-sm" onclick="rikad.editMode(true)">Edit</button>
-				</div>
 
 				<hr>
 					<ul class="pager">
@@ -178,7 +179,7 @@
 	        	cari = selected.data;
         	}
         	else {
-	        	output = '<option selected="selected" value=""></option>';    		
+	        	output = '<option selected="selected" value=""></option>';
         	}
 
         	for(var result in data) {
@@ -198,9 +199,9 @@
 			var output;
 
 			switch (type) {
-				case 'multiselect': 
+				case 'multiselect':
 					output = '<select class="js-multiselectize" name="'+name+'[]" multiple="multiple">';
-					output += this.buildOption(name,value); 
+					output += this.buildOption(name,value);
 					output +='</select>';
 				break;
 				case 'textarea': output =   '<textarea class="form-control" name="'+name+'">'+value+'</textarea>';
@@ -217,7 +218,7 @@
 					}
 					output += '</select>';
 				break;
-				case 'date': 
+				case 'date':
 					output = '<div class="input-group date" id="date"><input type="text" class="form-control" name="'+ name +'" value="'+ value +'" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>';
 				break;
 				default: output = '<input type="text" class="form-control" name="'+ name +'" value="'+ value +'" />';
@@ -227,7 +228,7 @@
 
 		this.showModal = function (data,id) {
 			$('#myModal').modal();
-			var form = '<form method="POST" action="/menu/publications" enctype="multipart/form-data"> {{ csrf_field() }} ';
+			var form = '';
 			form += '<input type="hidden" value="'+id+'" name="id">';
 			var i=0;
 			for(var input in this.inputName) {
@@ -237,8 +238,6 @@
 
 				i++;
 			}
-
-			form += '<div align="right"><button class="btn btn-primary btn-sm" onclick="rikad.sendSave(id)">Save</button></div>';
 
 			var content = $('#myModal').find('p')
 			content[0].innerHTML = form;
@@ -275,14 +274,13 @@
 	            	location.reload();
 	            },
 	            success: function() {
-	            	location.reload(); 
+	            	location.reload();
 	            }
 	    	});
 		}
 
 		this.editMode = function(state) {
 			if(state) {
-				document.getElementById("addBtn").style.display = 'inline';
 				var editBtn = document.getElementById("editBtn");
 				editBtn.innerHTML = 'Cancel';
 				editBtn.onclick = function () { rikad.editMode(false) };
@@ -292,7 +290,6 @@
 				this.actionMode(true);
 			}
 			else {
-				document.getElementById("addBtn").style.display = 'none';
 				var editBtn = document.getElementById("editBtn");
 				editBtn.innerHTML = 'Edit';
 				editBtn.onclick = function () { rikad.editMode(true) };
@@ -304,7 +301,7 @@
 		}
 
 		this.actionMode = function(state) {
-			var rows = this.data.getElementsByTagName('tr'); 
+			var rows = this.data.getElementsByTagName('tr');
 			var mode = state ? 'block' : 'none';
 
 			for (var row=0; row < rows.length; row++) {
@@ -314,7 +311,7 @@
 				}
 				else {
 					var cells = rows[row].getElementsByTagName('td');
-					cells[cells.length -1].style.display = mode;					
+					cells[cells.length -1].style.display = mode;
 				}
 			}
 		}
@@ -332,4 +329,3 @@
 	@include('layouts._sidebarJS')
 
 @endsection
-

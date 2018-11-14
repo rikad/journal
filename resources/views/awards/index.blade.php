@@ -5,7 +5,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -13,19 +13,19 @@
           <h4 class="modal-title">Honors & Awards</h4>
         </div>
         <div class="modal-body">
+          <form method="POST" action="/menu/awards"> {{ csrf_field() }}
           <p></p>
-          <p>Example : 
+          <p>Example :
           <ul>
           		<li>Best Enterpreneur Award – Achivement Association and Indonesian Professional Award (year - year)</li>
           		<li>Best Enterpreneur Award – Achivement Association and Indonesian Professional Award (year)</li>
           </ul>
           </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
+          <input type="submit" class="form-control btn-primary" value="Save">
+          </form>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -46,6 +46,13 @@
 					<h2 class="panel-title">Update Honors & Awards Information</h2>
 				</div>
 				<div class="panel-body">
+
+          <div id="controlBtn" align="right">
+            <button id="addBtn" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
+            <button id="editBtn" class="btn btn-warning btn-sm" onclick="rikad.editMode(true)">Edit</button>
+          </div>
+          <hr>
+
 @if (empty($data[0]))
 	<p>No one record found, click add to add record.</p>
 				<table id="maintable" style="display: none" class="table table-striped">
@@ -86,11 +93,6 @@
 					<button id="editBtn" class="btn btn-primary btn-sm" onclick="rikad.editMode(true)">Edit</button>
 				</div>
 
-				<hr>
-					<ul class="pager">
-					  <li class="previous"><a href="#">&larr; Previous</a></li>
-					  <li class="next"><a href="#">Next &rarr;</a></li>
-					</ul>
 				</div>
 			</div>
 		</div>
@@ -167,7 +169,7 @@
 				case 'select':
 					output = '<select class="js-selectize" name="'+name+'">'+ this.buildOption(name,value) +'</select>';
 				break;
-				case 'date': 
+				case 'date':
 					output = '<div class="input-group date" id="date"><input type="text" class="form-control" name="'+ name +'" value="'+ value +'" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div>';
 				break;
 				default: output = '<input type="text" class="form-control" name="'+ name +'" value="'+ value +'" />';
@@ -177,7 +179,7 @@
 
 		this.showModal = function (data,id) {
 			$('#myModal').modal();
-			var form = '<form method="POST" action="/menu/awards"> {{ csrf_field() }} ';
+			var form = '';
 			form += '<input type="hidden" value="'+id+'" name="id">';
 			var i=0;
 			for(var input in this.inputName) {
@@ -187,8 +189,6 @@
 
 				i++;
 			}
-
-			form += '<div align="right"><button class="btn btn-primary btn-sm" onclick="rikad.sendSave(id)">Save</button></div>';
 
 			var content = $('#myModal').find('p')
 			content[0].innerHTML = form;
@@ -222,14 +222,13 @@
 	            	location.reload();
 	            },
 	            success: function() {
-	            	location.reload(); 
+	            	location.reload();
 	            }
 	    	});
 		}
 
 		this.editMode = function(state) {
 			if(state) {
-				document.getElementById("addBtn").style.display = 'inline';
 				var editBtn = document.getElementById("editBtn");
 				editBtn.innerHTML = 'Cancel';
 				editBtn.onclick = function () { rikad.editMode(false) };
@@ -239,7 +238,6 @@
 				this.actionMode(true);
 			}
 			else {
-				document.getElementById("addBtn").style.display = 'none';
 				var editBtn = document.getElementById("editBtn");
 				editBtn.innerHTML = 'Edit';
 				editBtn.onclick = function () { rikad.editMode(true) };
@@ -251,7 +249,7 @@
 		}
 
 		this.actionMode = function(state) {
-			var rows = this.data.getElementsByTagName('tr'); 
+			var rows = this.data.getElementsByTagName('tr');
 			var mode = state ? 'block' : 'none';
 
 			for (var row=0; row < rows.length; row++) {
@@ -261,7 +259,7 @@
 				}
 				else {
 					var cells = rows[row].getElementsByTagName('td');
-					cells[cells.length -1].style.display = mode;					
+					cells[cells.length -1].style.display = mode;
 				}
 			}
 		}
@@ -278,4 +276,3 @@
 	@include('layouts._sidebarJS')
 
 @endsection
-

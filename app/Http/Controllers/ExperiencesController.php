@@ -89,12 +89,18 @@ class ExperiencesController extends Controller
 
         $validator = Validator::make($data, $this->validation());
         if ($validator->fails()) {
+            $failMessage = json_decode(json_encode($validator->messages()));
+            $message = '<ul>';
+            foreach ($failMessage as $key => $value) {
+              $message = $message. '<li>'.$value[0].'</li>';
+            }
+            $message = $message . '</ul>';
             Session::flash("flash_notification", [
                 "level"=>"danger",
-                "message"=>$validator->messages()
+                "message"=>$message
             ]);
 
-            return redirect()->action('ExperiencesController@index');
+            return back();
         }
 
         //check if data exists update else create

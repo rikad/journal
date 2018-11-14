@@ -15,6 +15,7 @@ use App\Activity;
 use App\Publication;
 
 use Session;
+use DB;
 
 class VitaeController extends Controller
 {
@@ -74,7 +75,7 @@ class VitaeController extends Controller
 	            "level"=>"warning",
 	            "message"=>"Please Complete Your Data Before"
 	        ]);
-
+					return back();
         }
 
         return view('vitae.index')->with(compact('data'));
