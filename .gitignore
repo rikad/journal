@@ -10,6 +10,12 @@ bootstrap/cache/
 .env.*.php
 .env.php
 .env
+*.bat
+php
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
+
+
+#custom
+public/publications

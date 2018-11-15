@@ -139,12 +139,12 @@
 		this.data = document.getElementById(table);
 		this.optionData = {};
 		this.inputName = {
-			title: {title:'Title',type:'text'},
-			published: {title:'Published On',type:'date'},
-			description: {title:'Short Description',type:'textarea'},
-			users: {title:'Select authors from users (* this publications will appear on their publications)',type:'multiselect'},
-			authors: {title:'Add another authors',type:'select'},
-			file: {title:'Upload',type:'file'}
+			title: {title:'Title (*)',type:'text'},
+			published: {title:'Published On (*)',type:'date'},
+			description: {title:'Short Description (*)',type:'textarea'},
+			users: {title:'Internal authors ( this publications will be listed on their publications )',type:'multiselect'},
+			authors: {title:'External authors ( author from another institution )',type:'select'},
+			file: {title:'Upload ( Doc, Docx, & Pdf  )',type:'file'}
 		};
 		this.existsData = this.data.rows.length;
 
@@ -204,7 +204,7 @@
 					output += this.buildOption(name,value);
 					output +='</select>';
 				break;
-				case 'textarea': output =   '<textarea class="form-control" name="'+name+'">'+value+'</textarea>';
+				case 'textarea': output =   '<textarea class="form-control" placeholder="Example : Journal of Science and Technology Vietnamese Academy of Science and Technology. Vol 49. Issue 1A." name="'+name+'">'+value+'</textarea>';
 				break;
 				case 'file': output='<input class="form-control" type="file" name="file">';
 				break;

@@ -42,6 +42,7 @@
 				<h4 align="center">@if($data['profile']->prefix and $data['profile']->name and $data['profile']->suffix) {{ $data['profile']->prefix }}. {{ $data['profile']->name }}, {{ $data['profile']->suffix }} @elseif($data['profile']->name and $data['profile']->suffix) {{ $data['profile']->name }}, {{ $data['profile']->suffix }} @elseif($data['profile']->name) {{ $data['profile']->name }} @else - @endif</h4>
 				<p align="center">@if($data['role']->display_name) {{ $data['role']->display_name }} @else - @endif</p>
 
+        <hr>
 				<table>
 
 					<tr>
@@ -71,6 +72,7 @@
 
 				</table>
 
+        <hr>
 				<table>
 
 					<tr>
@@ -90,7 +92,7 @@
 						</td>
 					</tr>
 
-					<tr>
+					<tr class="rowHead">
 						<td><b>Academic Experience</b></td>
 					</tr>
 					<tr>
@@ -110,7 +112,7 @@
 					</tr>
 
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Non-Academic Experience</b></td>
 					</tr>
 					<tr>
@@ -129,7 +131,7 @@
 						</td>
 					</tr>
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Certifications & Professional Registrations</b></td>
 					</tr>
 					<tr>
@@ -146,7 +148,7 @@
 						</td>
 					</tr>
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Membership in Professional Organizations</b></td>
 					</tr>
 					<tr>
@@ -163,7 +165,7 @@
 						</td>
 					</tr>
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Honors & Awards</b></td>
 					</tr>
 					<tr>
@@ -180,7 +182,7 @@
 						</td>
 					</tr>
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Service Activities</b></td>
 					</tr>
 					<tr>
@@ -199,14 +201,14 @@
 						</td>
 					</tr>
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Key Publications & Presentations</b></td>
 					</tr>
 					<tr>
 						<td>tes</td>
 					</tr>
 
-					<tr>
+          <tr class="rowHead">
 						<td><b>Professional Development Activities</b></td>
 					</tr>
 					<tr>
@@ -240,6 +242,12 @@
 th, td {
     padding: 5px;
     text-align: left;
+}
+table {
+  width: 100%;
+}
+.rowHead {
+  border-top: 1px solid #ECEFF0;
 }
 </style>
 @endsection

@@ -17,9 +17,9 @@ class CreateAuthorsTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('no')->unique();
-            $table->string('initial', 5)->unique();
+            $table->string('initial', 10)->unique();
             $table->string('prefix', 10)->nullable();
-            $table->string('name', 40);
+            $table->string('name', 60);
             $table->string('suffix', 10)->nullable();
             $table->string('phone', 20)->nullable();
             $table->string('birthplace', 40);
