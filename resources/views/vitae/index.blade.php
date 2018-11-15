@@ -37,7 +37,7 @@
 				</div>
 				<div class="panel-body">
 
-				<p align="right">Print</p>
+				<p align="right"><button class="btn btn-primary btn-sm" onclick="generate()"><span class="glyphicon glyphicon-print"></span> Print</button></p>
 
 				<h4 align="center">@if($data['profile']->prefix and $data['profile']->name and $data['profile']->suffix) {{ $data['profile']->prefix }}. {{ $data['profile']->name }}, {{ $data['profile']->suffix }} @elseif($data['profile']->name and $data['profile']->suffix) {{ $data['profile']->name }}, {{ $data['profile']->suffix }} @elseif($data['profile']->name) {{ $data['profile']->name }} @else - @endif</h4>
 				<p align="center">@if($data['role']->display_name) {{ $data['role']->display_name }} @else - @endif</p>
@@ -250,4 +250,48 @@ table {
   border-top: 1px solid #ECEFF0;
 }
 </style>
+@endsection
+@section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.9.1/docxtemplater.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.6.1/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip-utils/0.0.2/jszip-utils.js"></script>
+
+<script>
+
+function loadFile(url,callback){
+    JSZipUtils.getBinaryContent(url,callback);
+}
+function generate() {
+    loadFile("/Cv-Abet-Template.docx",function(error,content){
+        if (error) { throw error };
+        var zip = new JSZip(content);
+        var doc=new window.docxtemplater().loadZip(zip)
+        doc.setData({
+            name: 'John',
+            phone: '0652455478',
+        });
+        try {
+            // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+            doc.render()
+        }
+        catch (error) {
+            var e = {
+                message: error.message,
+                name: error.name,
+                stack: error.stack,
+                properties: error.properties,
+            }
+            console.log(JSON.stringify({error: e}));
+            // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+            throw error;
+        }
+        var out=doc.getZip().generate({
+            type:"blob",
+            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        }) //Output the document using Data-URI
+        saveAs(out,"output.docx")
+    })
+}
+</script>
 @endsection
