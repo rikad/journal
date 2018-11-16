@@ -42,9 +42,9 @@
 </div>
 
 <div class="form-group{{ $errors->has('birthplace') || $errors->has('birthdate') ? ' has-error' : '' }}">
-	{!! Form::label('birthplace', 'Birthdate', ['class'=>'col-md-2 control-label']) !!}
+	{!! Form::label('birthplace', 'Place/Date of Birth', ['class'=>'col-md-2 control-label']) !!}
 	<div class="col-md-4">
-	{!! Form::text('birthplace', null, ['class'=>'form-control']) !!}
+	{!! Form::text('birthplace', null, ['class'=>'form-control', 'placeholder' =>'Bandung, Indonesia']) !!}
 	{!! $errors->first('birthplace', '<p class="help-block">:message</p>') !!}
 	</div>
 

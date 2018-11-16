@@ -133,11 +133,11 @@
 		this.data = document.getElementById(table);
 		this.optionData = {};
 		this.inputName = {
-			program_id: {title:'Program',type:'select'},
-			institution_id: {title:'Institution',type:'select'},
-			country_id: {title:'Country',type:'select'},
-			start_date: {title:'Start Date',type:'date'},
-			end_date: {title:'End Date',type:'date'}
+			program_id: {title:'Program (* type and add if not listed)',type:'select'},
+			institution_id: {title:'Institution (* type and add if not listed)',type:'select'},
+			country_id: {title:'Country (*)',type:'select'},
+			start_date: {title:'Start Date (opsional)',type:'date'},
+			end_date: {title:'End Date (*)',type:'date'}
 		};
 		this.existsData = this.data.rows.length;
 

@@ -21,30 +21,40 @@ class VitaeController extends Controller
 {
 	public function index()
 	{
-        $user = Auth::user();
 
         $data = array();
+				$output = array();
+				$user = Auth::user();
+
         $data['user'] = $user;
         $data['role'] = Auth::user()->roles()->first();
         $data['profile'] = Profile::where('user_id', $user->id)->first();
-        $data['educations'] = Education::join('countries','countries.id','=','educations.country_id')
+
+				//if users not yet filled the profile
+				if (!$data['profile']) {
+					Session::flash("flash_notification", [
+							"level"=>"warning",
+							"message"=>"Please Complete Your Data Before"
+					]);
+					return back();
+				}
+
+        $output['educations'] = Education::join('countries','countries.id','=','educations.country_id')
                 ->join('organizations as program','program.id','=','educations.program_id')
                 ->join('organizations as institution','institution.id','=','educations.institution_id')
-                ->select('educations.start_date','educations.end_date','countries.country','institution.organization as institution','program.organization as program')
+                ->select(DB::raw('YEAR(educations.end_date) AS year'),'educations.start_date','educations.end_date','countries.country','institution.organization as institution','program.organization as program')
                 ->where('user_id',$user->id)
                 ->get();
 
-        $data['experiences'] = Experience::join('organizations','organizations.id','=','experiences.organization_id')
+        $output['experiences'] = Experience::join('organizations','organizations.id','=','experiences.organization_id')
                 ->select('experiences.*','organizations.organization as organization')
                 ->where('user_id',$user->id)
                 ->get();
 
-        $data['certifications'] = Certification::where('user_id', $user->id)->get();
-        $data['memberships'] = Membership::where('user_id', $user->id)->get();
-        $data['awards'] = Award::where('user_id', $user->id)->get();
-        $data['activities'] = Activity::where('user_id', $user->id)->get();
-
-        //$data['publications'] = Publication::where('user_id', $user->id)->get();
+        $output['certifications'] = Certification::where('user_id', $user->id)->get();
+        $output['memberships'] = Membership::where('user_id', $user->id)->get();
+        $output['awards'] = Award::where('user_id', $user->id)->get();
+        $output['activities'] = Activity::where('user_id', $user->id)->get();
 
         //publications
         $publications = Publication::select('publications.*')
@@ -67,18 +77,22 @@ class VitaeController extends Controller
         }
         //end publications
 
+				//name prefix suffix
+				$output['name'] = '-';
+				if($data['profile']->prefix and $data['profile']->name and $data['profile']->suffix) {
+					 $output['name'] = $data['profile']->prefix.'. '.$data['profile']->name.', '.$data['profile']->suffix;
+				} elseif($data['profile']->name and $data['profile']->suffix) {
+					$output['name'] = $data['profile']->name.', '.$data['profile']->suffix;
+				} elseif($data['profile']->name) {
+					$output['name'] = $data['profile']->name;
+				}
 
+				$output['role'] = $data['role']->display_name ? $data['role']->display_name : '-';
+				$output['birth'] = $data['profile']->birthplace && $data['profile']->birthdate ? ucfirst($data['profile']->birthplace).', '.$data['profile']->birthdate : '-';
+				$output['phone'] = $data['profile']->phone ? $data['profile']->phone : '-';
+				$output['email'] = $data['user']->email ? $data['user']->email : '-';
 
-        //if users not yet filled the profile
-        if (!$data['profile']) {
-	        Session::flash("flash_notification", [
-	            "level"=>"warning",
-	            "message"=>"Please Complete Your Data Before"
-	        ]);
-					return back();
-        }
-
-        return view('vitae.index')->with(compact('data'));
+        return view('vitae.index', [ 'data' => $output ]);
 
 	}
 }

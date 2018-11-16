@@ -88,10 +88,10 @@
 				</table>
 
 				<hr>
-				<div id="controlBtn" align="right">
-					<button id="addBtn" style="display:none" class="btn btn-primary btn-sm" onclick="rikad.addRow()">Add</button>
-					<button id="editBtn" class="btn btn-primary btn-sm" onclick="rikad.editMode(true)">Edit</button>
-				</div>
+        <ul class="pager">
+          <li class="previous"><a href="#">&larr; Previous</a></li>
+          <li class="next"><a href="#">Next &rarr;</a></li>
+        </ul>
 
 				</div>
 			</div>

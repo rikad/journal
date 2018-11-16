@@ -60,8 +60,8 @@ class CreateAuthorsTable extends Migration
             $table->integer('institution_id')->unsigned();
             $table->integer('country_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
+            $table->date('start_date')->nullable();;
+            $table->date('end_date');
             $table->timestamps();
 
             $table->foreign('program_id')->references('id')->on('organizations')->onUpdate('cascade')->onDelete('cascade');

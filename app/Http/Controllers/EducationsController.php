@@ -37,7 +37,7 @@ class EducationsController extends Controller
             'program_id' => 'required|numeric',
             'institution_id' => 'required|numeric',
             'country_id' => 'required|numeric',
-            'start_date' => 'required|date',
+            'start_date' => 'nullable|date',
             'end_date' => 'required|date'
         ];
 
