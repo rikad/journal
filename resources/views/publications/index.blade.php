@@ -13,7 +13,7 @@
           <h4 class="modal-title">Key Publications & Presentations</h4>
         </div>
         <div class="modal-body">
-          <form method="POST" action="/menu/publications"> {{ csrf_field() }}
+          <form method="POST" action="/menu/publications" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data"> {{ csrf_field() }}
             <p></p>
             <input type="submit" class="form-control btn-primary" value="Save">
           </form>

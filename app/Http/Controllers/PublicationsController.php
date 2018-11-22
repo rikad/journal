@@ -62,7 +62,7 @@ class PublicationsController extends Controller
             'title' => 'required',
             'description' => 'required',
             'published' => 'required|date',
-            'file' => 'nullable|max:100000|mimes:doc,docx,pdf'
+            'file' => 'nullable|max:50000|mimes:doc,docx,pdf'
         ];
 
         return $data;

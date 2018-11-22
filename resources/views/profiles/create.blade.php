@@ -19,16 +19,21 @@
 				</div>
 				<div class="panel-body">
 					<div class="row">
+						{!! Form::model($data, ['class'=>'form-horizontal','files' => true]) !!}
 						<div class="col-md-4" style="text-align: center">
-							<img class="img-responsive img-circle" src="https://www.w3schools.com/w3images/fjords.jpg" alt="foto">
+							<img class="img-responsive img-circle" src="https://www.w3schools.com/w3images/fjords.jpg" width="200" alt="foto">
 							<hr>
-							<button class="btn btn-primary btn-sm">Change Image</button>
+							<div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
+								<div class="col-md-8">
+								{!! Form::file('file', null, ['class'=>'form-control']) !!}
+								{!! $errors->first('file', '<p class="help-block">:message</p>') !!}
+								</div>
+							</div>
 						</div>
 						<div class="col-md-8">
-							{!! Form::model($data, ['class'=>'form-horizontal']) !!}
 							@include('profiles._form')
-							{!! Form::close() !!}
 						</div>
+						{!! Form::close() !!}
 					</div>
 
 					<hr>

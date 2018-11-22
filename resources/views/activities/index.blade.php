@@ -15,7 +15,12 @@
         <div class="modal-body">
           <form method="POST" action="/menu/activities"> {{ csrf_field() }}
             <p></p>
-            <p>Example : Ministry of National Education of the Republic of Indonesia Educators Certificate, No. 101104904181, issued on July 5, 2010</p>
+            <p>Example :
+              <ul>
+                <li>Course planning, teaching & evaluation at the undergraduate & graduate levels</li>
+                <li>Attending The Third International Symposium on Novel Carbon Resour Sciences, Fukuoka, Nov.2009</li>
+              </ul>
+            </p>
             <input type="submit" class="form-control btn-primary" value="Save">
           </form>
         </div>

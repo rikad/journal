@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Session;
 
 use App\Profile;
@@ -16,11 +17,10 @@ class ProfilesController extends Controller
         $data = [
             'no' => 'required|unique:profiles',
             'initial' => 'required|unique:profiles',
-            //'prefix' => '',
             'name' => 'required',
-            //'suffix' => 'required|unique:authors',
+            'file' => 'nullable|max:3000|mimes:jpg,jpeg',
             'birthplace' => 'required',
-            'birthdate' => 'required|date' 
+            'birthdate' => 'required|date'
         ];
 
         if(!empty($id)) {
