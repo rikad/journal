@@ -5,6 +5,7 @@
   $Sactivities = [];
   $awards = [];
   $memberships = [];
+  $publications = [];
 @endphp
 
 @extends('layouts.app')
@@ -238,8 +239,32 @@
           <tr class="rowHead">
 						<td><b>Key Publications & Presentations</b></td>
 					</tr>
-					<tr>
-						<td>tes</td>
+          <tr>
+						<td>
+							<ul>
+							@if(isset($data['publications']))
+								@foreach( $data['publications'] as $publication)
+                @php
+                  if($publication['authors'] == '') {
+                    $authors = $publication['users'];
+                  }
+                  else {
+                    $authors = array_merge($publication['users'],json_decode($publication['authors'])->data);
+                  }
+
+                  $authors[count($authors) - 1] = 'and '.$authors[count($authors) - 1];
+                  $authors = implode(', ',$authors);
+
+                  $tmp = $authors.', '.$publication['title'].', '.$publication['description'];
+                  $publications[] = ['title' => $tmp];
+                @endphp
+                <li>{{ $tmp }}</li>
+								@endforeach
+							@else
+								-
+							@endif
+							</ul>
+						</td>
 					</tr>
 
           <tr class="rowHead">
@@ -287,10 +312,10 @@ table {
 </style>
 @endsection
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.9.1/docxtemplater.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.6.1/jszip.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip-utils/0.0.2/jszip-utils.js"></script>
+<script src="{{ url("/js/docxtemplater.js") }}"></script>
+<script src="{{ url("/js/jszip.min.js") }}"></script>
+<script src="{{ url("/js/FileSaver.js") }}"></script>
+<script src="{{ url("/js/jszip-utils.js") }}"></script>
 
 <script>
 
@@ -316,6 +341,7 @@ function generate() {
             awards: {!! json_encode($awards) !!},
             Pactivities: {!! json_encode($Pactivities) !!},
             Sactivities: {!! json_encode($Sactivities) !!},
+            publications: {!! json_encode($publications) !!},
         });
         try {
             // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)

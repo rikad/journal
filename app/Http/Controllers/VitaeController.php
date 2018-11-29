@@ -61,19 +61,23 @@ class VitaeController extends Controller
                     ->join('publication_user','publication_user.publication_id','=','publications.id')
                     ->where('publication_user.user_id',$user->id)->get();
 
-        $final = [];
+        $output['publications'] = [];
         foreach ($publications as $value) {
-            $relation = DB::table('publication_user')->select('users.name')
+						$relation = DB::table('publication_user')->select('users.name','users.email','profiles.name as fullname')
                         ->join('users','users.id','publication_user.user_id')
+												->leftJoin('profiles','users.id','profiles.user_id')
                         ->where('publication_id',$value->id)
                         ->where('users.id','<>',Auth::id())->get();
             $users = [];
-            foreach ($relation as $v) {
-                $users[] = $v->name;
+            foreach ($relation as $k => $v) {
+							if ($v->fullname) {
+								$users[] = $v->fullname;
+							} else {
+								$users[] = $v->name;
+							}
             }
-            $relation = [ 'data' => $users];
 
-            $final[] =['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation) ];
+            $output['publications'][] = ['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>$users ];
         }
         //end publications
 

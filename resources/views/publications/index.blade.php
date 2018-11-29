@@ -57,9 +57,9 @@
 				      <tr>
 				        <th>#</th>
 				        <th>Title</th>
+                <th>Description</th>
 				        <th>Authors</th>
 				        <th>Published</th>
-				        <th style="display:none">desciption</th>
 				        <th style="display:none">users</th>
 				        <th style="display:none">authors</th>
 				        <th style="display:none">file</th>
@@ -78,11 +78,15 @@
 						@endphp
 				        <td>{{ $value['title'] }}</td>
 				        <td style="display:none">{{ $value['published'] }}</td>
-				        <td style="display:none">{{ $value['description'] }}</td>
+				        <td>{{ $value['description'] }}</td>
 				        <td style="display:none">{!! $value['users'] !!}</td>
 				        <td style="display:none">{!! $value['authors'] !!}</td>
 				        <td style="display:none">{{ $value['file'] }}</td>
-                <td>{{ implode(',',array_merge($value['fullname'],json_decode($value['authors'])->data)) }}</td>
+                @if($value['authors'] == '')
+                <td>{{ implode(', ',$value['fullname']) }}</td>
+                @else
+                <td>{{ implode(', ',array_merge($value['fullname'],json_decode($value['authors'])->data)) }}</td>
+                @endif
                 <td>{{ $value['published'] }}</td>
 				        <td style="vertical-align: middle; display: none">@if ($value['file'] != '') <button class="btn btn-xs" onclick="rikad.download('{{ $value['file'] }}')"><span class="glyphicon glyphicon-file"></span>Download</button>@endif <button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value['id'] }})"><span class="glyphicon glyphicon-pencil"></span></button>  <button class="btn btn-danger btn-xs" onclick="rikad.delete({{ $value['id'] }})"><span class="glyphicon glyphicon-remove"></span></button></td>
 				      </tr>
@@ -207,7 +211,7 @@
 					output += this.buildOption(name,value);
 					output +='</select>';
 				break;
-				case 'textarea': output =   '<textarea class="form-control" placeholder="Example : Journal of Science and Technology Vietnamese Academy of Science and Technology. Vol 49. Issue 1A." name="'+name+'">'+value+'</textarea>';
+				case 'textarea': output =   '<textarea class="form-control" placeholder="Journal of Applied Polymer Science. Volume 135, Issue 39, 15 October 2018, Article number 46690. ISSN: 00218995. DOI: 10.1002/app.46690." name="'+name+'">'+value+'</textarea>';
 				break;
 				case 'file': output='<input class="form-control" type="file" name="file">';
 				break;

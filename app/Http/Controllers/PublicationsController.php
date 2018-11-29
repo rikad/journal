@@ -51,7 +51,7 @@ class PublicationsController extends Controller
 
             $relation = [ 'data' => $users];
 
-            $final[] =['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation),'fullname'=>$authorFullname ];
+            $final[] = ['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation),'fullname'=>$authorFullname ];
         }
 
         return View('publications.index', ['data'=>$final]);
@@ -143,6 +143,8 @@ class PublicationsController extends Controller
 
         if ($request->input('authors') != null) {
             $data['authors'] = json_encode([ 'data'=> $data['authors'] ]);
+        } else {
+          $data['authors'] = null;
         }
 
         // isi field file jika ada file yang diupload
