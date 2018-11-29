@@ -57,6 +57,7 @@
 				      <tr>
 				        <th>#</th>
 				        <th>Title</th>
+				        <th>Authors</th>
 				        <th>Published</th>
 				        <th style="display:none">desciption</th>
 				        <th style="display:none">users</th>
@@ -76,12 +77,14 @@
 				    	$i++;
 						@endphp
 				        <td>{{ $value['title'] }}</td>
-				        <td>{{ $value['published'] }}</td>
+				        <td style="display:none">{{ $value['published'] }}</td>
 				        <td style="display:none">{{ $value['description'] }}</td>
 				        <td style="display:none">{!! $value['users'] !!}</td>
 				        <td style="display:none">{!! $value['authors'] !!}</td>
 				        <td style="display:none">{{ $value['file'] }}</td>
-				        <td style="vertical-align: middle; display: none"><button class="btn btn-xs" onclick="rikad.download('{{ $value['file'] }}')"><span class="glyphicon glyphicon-file"></span>Download</button>  <button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value['id'] }})"><span class="glyphicon glyphicon-pencil"></span></button>  <button class="btn btn-danger btn-xs" onclick="rikad.delete({{ $value['id'] }})"><span class="glyphicon glyphicon-remove"></span></button></td>
+                <td>{{ implode(',',array_merge($value['fullname'],json_decode($value['authors'])->data)) }}</td>
+                <td>{{ $value['published'] }}</td>
+				        <td style="vertical-align: middle; display: none">@if ($value['file'] != '') <button class="btn btn-xs" onclick="rikad.download('{{ $value['file'] }}')"><span class="glyphicon glyphicon-file"></span>Download</button>@endif <button class="btn btn-primary btn-xs" onclick="rikad.edit(this,{{ $value['id'] }})"><span class="glyphicon glyphicon-pencil"></span></button>  <button class="btn btn-danger btn-xs" onclick="rikad.delete({{ $value['id'] }})"><span class="glyphicon glyphicon-remove"></span></button></td>
 				      </tr>
 						@endforeach
 				    </tbody>
@@ -142,8 +145,8 @@
 			title: {title:'Title (*)',type:'text'},
 			published: {title:'Published On (*)',type:'date'},
 			description: {title:'Short Description (*)',type:'textarea'},
-			users: {title:'Internal authors ( this publications will be listed on their publications )',type:'multiselect'},
-			authors: {title:'External authors ( author from another institution )',type:'select'},
+			users: {title:'Internal authors ( select email )',type:'multiselect'},
+			authors: {title:'External authors ( type full name )',type:'select'},
 			file: {title:'Upload ( Doc, Docx, & Pdf  )',type:'file'}
 		};
 		this.existsData = this.data.rows.length;
@@ -170,8 +173,8 @@
         this.buildOption = function(type,selected) {
         	var data = this.optionData;
         	var input = this.inputName[type];
-			var output;
-			var cari = [];
+			    var output;
+			    var cari = [];
 
         	if(selected != '' ) {
         		output ='<option value=""></option>';

@@ -31,17 +31,27 @@ class PublicationsController extends Controller
 
         $final = [];
         foreach ($data as $value) {
-            $relation = DB::table('publication_user')->select('users.name')
+            $relation = DB::table('publication_user')->select('users.name','users.email','profiles.name as fullname')
                         ->join('users','users.id','publication_user.user_id')
+                        ->leftJoin('profiles','users.id','profiles.user_id')
                         ->where('publication_id',$value->id)
                         ->where('users.id','<>',Auth::id())->get();
             $users = [];
+            $authorFullname = [];
+
             foreach ($relation as $v) {
-                $users[] = $v->name;
+                $users[] = $v->email;
+
+                if ($v->fullname) {
+                  $authorFullname[] = $v->fullname;
+                } else {
+                  $authorFullname[] = $v->name;
+                }
             }
+
             $relation = [ 'data' => $users];
 
-            $final[] =['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation) ];
+            $final[] =['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>json_encode($relation),'fullname'=>$authorFullname ];
         }
 
         return View('publications.index', ['data'=>$final]);
@@ -52,7 +62,7 @@ class PublicationsController extends Controller
         $data = User::join('role_user','role_user.user_id','users.id')
                     ->where('users.id','<>',Auth::id())
                     ->where('role_user.role_id','<>',1)
-                    ->pluck("users.name","users.id")->all();
+                    ->pluck("users.email","users.id")->all();
         return $data;
     }
 
@@ -71,12 +81,16 @@ class PublicationsController extends Controller
     public function download($file) {
         $filepath = public_path().DIRECTORY_SEPARATOR.'publications'. DIRECTORY_SEPARATOR . $file;
 
-        $publication = Publication::select('publications.id','publications.file')
+        $publication = Publication::select('publications.*')
                     ->join('publication_user','publication_user.publication_id','=','publications.id')
                     ->where('publications.file', $file)
                     ->where('publication_user.user_id',Auth::id())->first();
+
         if ($publication) {
-            return response()->file($filepath);
+            $ext = explode('.',$file);
+            $filename = $publication->title.'.'.$ext[1];
+
+            return response()->download($filepath,$filename);
         }
 
         Session::flash("flash_notification", [
@@ -155,17 +169,18 @@ class PublicationsController extends Controller
             //aksi edit ke relasi
             DB::table('publication_user')->where('publication_id',$publication->id)->delete();
             $relation = [ ['publication_id'=>$publication->id,'user_id'=>Auth::id()] ];
-            foreach($data['users'] as $value) {
-                $relation[] = ['publication_id'=>$publication->id,'user_id'=>$value ];
-            }
-            DB::table('publication_user')->insert($relation);
+
         } else {
             $publication = Publication::create($data);
             $relation = [ ['publication_id'=>$publication->id,'user_id'=>Auth::id()] ];
-            foreach($data['users'] as $value) {
-                $relation[] = ['publication_id'=>$publication->id,'user_id'=>$value ];
-            }
-            DB::table('publication_user')->insert($relation);
+        }
+
+        if (isset($data['users'])) {
+          foreach($data['users'] as $value) {
+              $relation[] = ['publication_id'=>$publication->id,'user_id'=>$value ];
+          }
+
+          DB::table('publication_user')->insert($relation);
         }
 
         Session::flash("flash_notification", [
