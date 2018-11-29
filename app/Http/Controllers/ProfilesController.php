@@ -50,6 +50,12 @@ class ProfilesController extends Controller
     {
         $id = Auth::id();
         $data = Profile::where('user_id', $id)->first();
+        $data['foto'] = url('/image/avatar.png');
+
+        $imgPath = public_path().DIRECTORY_SEPARATOR.'profiles'.DIRECTORY_SEPARATOR.$id.'.jpg';
+        if(file_exists($imgPath)) {
+          $data['foto'] = url('/profiles/'.$id.'.jpg');
+        }
 
         return view('profiles.create')->with(compact('data'));
     }
@@ -74,6 +80,22 @@ class ProfilesController extends Controller
             $this->validate($request, $this->validation());
             $data['user_id'] = $id;
             Profile::create($data);
+        }
+
+        // isi field file jika ada file yang diupload
+        if ($request->hasFile('file')) {
+            // Mengambil file yang diupload
+            $uploaded = $request->file('file');
+            // mengambil extension file
+            $extension = $uploaded->getClientOriginalExtension();
+            // membuat nama file random berikut extension
+            $filename = $id.'.jpg';
+
+            // menyimpan ke folder public/img
+            $destinationPath = public_path() . DIRECTORY_SEPARATOR . 'profiles';
+            $uploaded->move($destinationPath, $filename);
+
+            $data['file'] = $filename;
         }
 
         Session::flash("flash_notification", [

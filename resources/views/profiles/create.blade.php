@@ -21,7 +21,7 @@
 					<div class="row">
 						{!! Form::model($data, ['class'=>'form-horizontal','files' => true]) !!}
 						<div class="col-md-4" style="text-align: center">
-							<img class="img-responsive img-circle" src="https://www.w3schools.com/w3images/fjords.jpg" width="200" alt="foto">
+							<img class="img-responsive" src="{{ $data['foto'] }}" width="200" alt="foto">
 							<hr>
 							<div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
 								<div class="col-md-8">
