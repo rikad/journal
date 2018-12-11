@@ -59,9 +59,3 @@
 	</div>
 
 </div>
-
-<div class="form-group">
-	<div class="col-md-8 col-md-offset-2" style="text-align: right">
-	{!! Form::submit('Simpan', ['class'=>'form-control btn-primary']) !!}
-	</div>
-</div>

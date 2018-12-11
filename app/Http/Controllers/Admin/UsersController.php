@@ -10,7 +10,7 @@ use App\Role;
 use Yajra\Datatables\Datatables;
 use Yajra\Datatables\Html\Builder;
 use Illuminate\Support\Facades\Auth;
-use Session;
+use Session, DB;
 use Validator;
 
 class UsersController extends Controller
@@ -49,7 +49,7 @@ class UsersController extends Controller
                     ->join('role_user','role_user.user_id','users.id')
                     ->join('roles','role_user.role_id','roles.id');
             return Datatables::of($data)
-                    ->addColumn('action',function($data) { 
+                    ->addColumn('action',function($data) {
                         return '<button class="btn btn-primary btn-xs" onclick="rikad.edit(this,\''.$data->id.'\')"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete(\''.$data->id.'\')"><span class="glyphicon glyphicon-remove"></span></button>';
                     })->make(true);
         }
@@ -103,9 +103,8 @@ class UsersController extends Controller
             }
 
             $user->update($data);
+            DB::table('role_user')->where('user_id',$user->id)->update(['role_id' => $data['role']]);
 
-            $user->detachRole($user->role_id);
-            $user->attachRole($data['role']);
         } else {
             $validator = Validator::make($data, $this->validation(false));
             if ($validator->fails()) {

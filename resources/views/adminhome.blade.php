@@ -23,7 +23,7 @@
             <div class="panel panel-default" url="/admin/users">
               <div class="panel-heading">Users Management</div>
               <div class="panel-body">
-                isi data
+                <span class="glyphicon glyphicon-user"></span>
               </div>
             </div>
           </div>
@@ -41,6 +41,17 @@
     </div>
   </div>
 </div>
+@endsection
+
+@section('css')
+<style type="text/css">
+  .panel-body span {
+    font-size: 100px
+  }
+  .panel-body {
+    text-align: center;
+  }
+</style>
 @endsection
 
 @section('scripts')

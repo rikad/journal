@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Session;
 
 use App\Profile;
+use App\User;
 
 
 class ProfilesController extends Controller
@@ -20,12 +21,28 @@ class ProfilesController extends Controller
             'name' => 'required',
             'file' => 'nullable|max:3000|mimes:jpg,jpeg',
             'birthplace' => 'required',
-            'birthdate' => 'required|date'
+            'birthdate' => 'required|date',
         ];
 
         if(!empty($id)) {
             $data['no'] = 'required|unique:profiles,no,'.$id;
             $data['initial'] = 'required|unique:profiles,initial,'.$id;
+        }
+
+        return $data;
+    }
+
+    public function validationLogin($id=false){
+
+        $data = [
+            'name' => 'nullable|unique:users',
+            'email' => 'nullable|unique:users',
+            'password' => 'nullable|min:6'
+        ];
+
+        if(!empty($id)) {
+            $data['username'] = 'required|unique:users,name,'.$id;
+            $data['email'] = 'required|unique:users,email,'.$id;
         }
 
         return $data;
@@ -51,6 +68,8 @@ class ProfilesController extends Controller
         $id = Auth::id();
         $data = Profile::where('user_id', $id)->first();
         $data['foto'] = url('/image/avatar.png');
+        $data['email'] = Auth::user()->email;
+        $data['username'] = Auth::user()->name;
 
         $imgPath = public_path().DIRECTORY_SEPARATOR.'profiles'.DIRECTORY_SEPARATOR.$id.'.jpg';
         if(file_exists($imgPath)) {
@@ -70,16 +89,27 @@ class ProfilesController extends Controller
     {
         $id = Auth::id();
         $data = $request->except(['_token']);
+        $dataLogin = $request->only('username','email');
         $profile = Profile::where('user_id', $id)->first();
+        $user = User::find($id);
+
+        if ($request->input('password')) {
+          $dataLogin['password'] = bcrypt($request->input('password'));
+        }
 
         //check if data exists update else create
-        if($profile){
+        if($profile) {
             $this->validate($request, $this->validation($profile->id));
+            $this->validate($request, $this->validationLogin($id));
             $profile->update($data);
+            $user->update($dataLogin);
         } else {
             $this->validate($request, $this->validation());
+            $this->validate($request, $this->validationLogin($id));
+
             $data['user_id'] = $id;
             Profile::create($data);
+            $user->update($dataLogin);
         }
 
         // isi field file jika ada file yang diupload

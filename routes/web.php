@@ -21,17 +21,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/publications/{year}', 'PublicController@publications');
+Route::get('/dosen/{id}', 'PublicController@dosen');
+Route::get('/search/{key}', 'PublicController@search');
+
 Route::get('/dashboard', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
-//Route::get('/', 'HomeController@index');
 
 Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'role:admin']], function () {
 	Route::get('users/roles', 'Admin\UsersController@roles');
 	Route::resource('users', 'Admin\UsersController');
-
-	// Route::resource('authors', 'AuthorsController');
-//	Route::resource('journals', 'JournalsController');
-//	Route::resource('profiles', 'JournalsController');
 });
 
 Route::group(['prefix'=>'menu', 'middleware'=>['auth']], function () {

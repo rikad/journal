@@ -39,7 +39,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">Data Journal & Profile</a>
+                    <a class="navbar-brand" href="{{ url('/') }}">Sistem Informasi Journal & Publikasi</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -60,10 +60,17 @@
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                  @if($profile = App\Profile::where('user_id', Auth::id())->first())
+                                  @if($profile->prefix){{ $profile->prefix }}. @endif{{ $profile->name }}@if($profile->suffix), .{{ $profile->suffix }}@endif
+                                  @else
+                                  {{ Auth::user()->email }}
+                                  @endif
+
+                                    <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ url('/menu/profiles/update') }}">Ubah Data Login</a></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
