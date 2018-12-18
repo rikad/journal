@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Publication;
 use App\Profile;
-use DB;
+use App\Education;
+use App\Experience;
+use App\Certification;
+use App\Membership;
+use App\Award;
+use App\Activity;
+use App\Publication;
+use App\User;
+
+use DB, Session;
 
 class PublicController extends Controller
 {
@@ -52,7 +60,7 @@ class PublicController extends Controller
 				$user = User::find($id);
 
         $data['user'] = $user;
-        $data['role'] = Auth::user()->roles()->first();
+        $data['role'] = $user->roles()->first();
         $data['profile'] = Profile::where('user_id', $user->id)->first();
 
 				//if users not yet filled the profile
@@ -121,7 +129,7 @@ class PublicController extends Controller
 				$output['phone'] = $data['profile']->phone ? $data['profile']->phone : '-';
 				$output['email'] = $data['user']->email ? $data['user']->email : '-';
 
-        return view('vitae.index', [ 'data' => $output ]);
+        return view('vitae.public', [ 'data' => $output ]);
 
     }
 

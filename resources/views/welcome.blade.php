@@ -60,7 +60,8 @@ foreach ($publications as $value) {
                   $authors = $publication['users'];
                 }
                 else {
-                  $authors = array_merge($publication['users'],json_decode($publication['authors'])->data);
+                  $authors = $publication['users'];
+                  $authors = array_merge($authors,json_decode($publication['authors'])->data);
                   $authors[count($authors) - 1] = 'and '.$authors[count($authors) - 1];
                 }
 
