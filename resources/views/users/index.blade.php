@@ -5,7 +5,7 @@
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -19,7 +19,7 @@
           <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+
     </div>
   </div>
 
@@ -119,7 +119,7 @@
 				case 'select':
 					output = '<select class="js-selectize" name="'+name+'">'+ this.buildOption(name,value) +'</select>';
 				break;
-				case 'date': 
+				case 'date':
 					output = '<div class="input-group date" id="date"><input type="text" class="form-control" name="'+ name +'" value="'+ value +'" /><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div>';
 				break;
 				default: output = '<input type="text" class="form-control" name="'+ name +'" value="'+ value +'" />';
@@ -159,6 +159,10 @@
 		this.add = function () {
 			this.showModal(null,null);
 		}
+    this.login = function (id) {
+      window.location = '{{ route('users.index') }}/'+id;
+		}
+
 		this.edit = function(row,id) {
 			var row = row.parentNode.parentNode.cells;
 
@@ -180,7 +184,7 @@
 	            	location.reload();
 	            },
 	            success: function() {
-	            	location.reload(); 
+	            	location.reload();
 	            }
 	    	});
 		}

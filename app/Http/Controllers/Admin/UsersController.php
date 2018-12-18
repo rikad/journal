@@ -44,13 +44,14 @@ class UsersController extends Controller
 
     public function index(Request $request, Builder $htmlBuilder)
     {
+
         if ($request->ajax()) {
             $data = User::select(['users.id','users.name', 'users.email','roles.display_name'])
                     ->join('role_user','role_user.user_id','users.id')
                     ->join('roles','role_user.role_id','roles.id');
             return Datatables::of($data)
                     ->addColumn('action',function($data) {
-                        return '<button class="btn btn-primary btn-xs" onclick="rikad.edit(this,\''.$data->id.'\')"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete(\''.$data->id.'\')"><span class="glyphicon glyphicon-remove"></span></button>';
+                        return '<button class="btn btn-default btn-xs" onclick="rikad.login('.$data->id.')"> Login as </button> <button class="btn btn-primary btn-xs" onclick="rikad.edit(this,\''.$data->id.'\')"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger btn-xs" onclick="rikad.delete(\''.$data->id.'\')"><span class="glyphicon glyphicon-remove"></span></button>';
                     })->make(true);
         }
 
@@ -138,7 +139,11 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        if(Auth::user()->hasRole('admin')) {
+          Auth::loginUsingId($id);
+        }
+
+        return redirect('/');
     }
 
     /**

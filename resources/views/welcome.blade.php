@@ -11,16 +11,16 @@ $year = App\Publication::selectRaw('YEAR(published) as year, count(id) as total'
 
 $data = [];
 foreach ($publications as $value) {
-    $relation = DB::table('publication_user')->select('users.name','users.email','profiles.name as fullname')
+    $relation = DB::table('publication_user')->select('users.id','users.name','users.email','profiles.name as fullname')
                 ->join('users','users.id','publication_user.user_id')
                 ->leftJoin('profiles','users.id','profiles.user_id')
                 ->where('publication_id',$value->id)->get();
     $users = [];
     foreach ($relation as $k => $v) {
       if ($v->fullname) {
-        $users[] = $v->fullname;
+        $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->fullname).'</a>';
       } else {
-        $users[] = $v->name;
+        $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->name).'</a>';
       }
     }
 
@@ -67,12 +67,11 @@ foreach ($publications as $value) {
 
                 $authors = implode(', ',$authors);
 
-                $tmp = $authors.', '.$publication['title'].', '.$publication['description'];
+                $tmp = $authors.', '.e($publication['title']).', '.e($publication['description']);
               @endphp
-              <tr><td>{{ $loop->iteration }}. </td><td>{{ $tmp }}</td></tr>
+              <tr><td>{{ $loop->iteration }}. </td><td>{!! $tmp !!}</td></tr>
               @endforeach
             </table>
-
 
           </div>
       </div>

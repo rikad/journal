@@ -21,9 +21,9 @@
 
                 $authors = implode(', ',$authors);
 
-                $tmp = $authors.', '.$publication['title'].', '.$publication['description'];
+                $tmp = $authors.', '.e($publication['title']).', '.e($publication['description']);
               @endphp
-              <tr><td>{{ $loop->iteration }}. </td><td>{{ $tmp }}</td></tr>
+              <tr><td>{{ $loop->iteration }}. </td><td>{!! $tmp !!}</td></tr>
               @endforeach
             </table>
 

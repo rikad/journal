@@ -23,6 +23,7 @@ Auth::routes();
 
 Route::get('/publications/{year}', 'PublicController@publications');
 Route::get('/dosen/{id}', 'PublicController@dosen');
+Route::get('/photo/{id}', 'PublicController@photo');
 Route::get('/search/{key}', 'PublicController@search');
 
 Route::get('/dashboard', 'HomeController@index');

@@ -30,7 +30,7 @@ class PublicController extends Controller
       $data = [];
       foreach ($publications as $value) {
           $relation = DB::table('publication_user')
-                      ->select('users.name','users.email','profiles.name as fullname')
+                      ->select('users.id','users.name','users.email','profiles.name as fullname')
                       ->join('users','users.id','publication_user.user_id')
                       ->leftJoin('profiles','users.id','profiles.user_id')
                       ->where('publication_id',$value->id)
@@ -39,9 +39,9 @@ class PublicController extends Controller
           $users = [];
           foreach ($relation as $k => $v) {
             if ($v->fullname) {
-              $users[] = $v->fullname;
+              $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->fullname).'</a>';
             } else {
-              $users[] = $v->name;
+              $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->name).'</a>';
             }
           }
 
@@ -124,6 +124,7 @@ class PublicController extends Controller
 					$output['name'] = $data['profile']->name;
 				}
 
+        $output['id'] = $data['user']->id;
 				$output['role'] = $data['role']->display_name ? $data['role']->display_name : '-';
 				$output['birth'] = $data['profile']->birthplace && $data['profile']->birthdate ? ucfirst($data['profile']->birthplace).', '.$data['profile']->birthdate : '-';
 				$output['phone'] = $data['profile']->phone ? $data['profile']->phone : '-';
@@ -153,7 +154,7 @@ class PublicController extends Controller
       $data = [];
       foreach ($publications->get() as $value) {
           $relation = DB::table('publication_user')
-                      ->select('users.name','users.email','profiles.name as fullname')
+                      ->select('users.id','users.name','users.email','profiles.name as fullname')
                       ->join('users','users.id','publication_user.user_id')
                       ->leftJoin('profiles','users.id','profiles.user_id')
                       ->where('publication_id',$value->id)
@@ -162,9 +163,9 @@ class PublicController extends Controller
           $users = [];
           foreach ($relation as $k => $v) {
             if ($v->fullname) {
-              $users[] = $v->fullname;
+              $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->fullname).'</a>';
             } else {
-              $users[] = $v->name;
+              $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->name).'</a>';
             }
           }
 
@@ -174,6 +175,17 @@ class PublicController extends Controller
 
       return view('search', [ 'publications' => $data, 'dosen' => $dosen->get() ]);
 
+    }
+
+    public function photo($id)
+    {
+
+        $path = public_path() . '/profiles/' . $id . '.jpg';
+        if (file_exists($path)) {
+            return response()->file($path);
+        } else {
+            return response()->file(public_path() . '/image/avatar.jpg');
+        }
     }
 
 }

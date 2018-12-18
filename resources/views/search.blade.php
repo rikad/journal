@@ -22,9 +22,9 @@
 
                 $authors = implode(', ',$authors);
 
-                $tmp = $authors.', '.$publication['title'].', '.$publication['description'];
+                $tmp = $authors.', '.e($publication['title']).', '.e($publication['description']);
               @endphp
-              <tr><td>{{ $loop->iteration }}. </td><td>{{ $tmp }}</td></tr>
+              <tr><td>{{ $loop->iteration }}. </td><td>{!! $tmp !!}</td></tr>
               @endforeach
               @else
                 <tr><td> Tidak Ada Data</td></tr>
@@ -43,7 +43,7 @@
 
               @if(count($dosen) > 0)
               @foreach( $dosen as $v)
-              <tr><td>{{ $loop->iteration }}. </td><td>{{ $v->name }}</td></tr>
+                <tr><td>{{ $loop->iteration }}. </td><td><a href="{{ url('/dosen/'.$v->user_id) }}">{{ $v->name }}</a></td></tr>
               @endforeach
               @else
                 <tr><td> Tidak Ada Data</td></tr>

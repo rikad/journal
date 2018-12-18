@@ -236,31 +236,39 @@ class PublicationsController extends Controller
      */
     public function destroy($id)
     {
-        $publication = Publication::select('publications.id','publications.file')
+        $publication = Publication::select('publications.id','publications.file','publications.title','publication_user.user_id')
                     ->join('publication_user','publication_user.publication_id','=','publications.id')
                     ->where('publications.id', $id)
-                    ->where('publication_user.user_id',Auth::id())->first();
+                    ->orderBy('publication_user.id','asc')
+                    ->first();
 
+        if ($publication->user_id == Auth::id()) {
+          $pub = Publication::find($publication->id);
+          $pub->delete();
 
-        if ($publication) {
-            $pub = Publication::find($publication->id);
-            $pub->delete();
+          // hapus file lama, jika ada
+          if ($publication->file) {
+              $filepath = public_path().DIRECTORY_SEPARATOR.'publications'. DIRECTORY_SEPARATOR . $publication->file;
+              try {
+                  File::delete($filepath);
 
-            // hapus file lama, jika ada
-            if ($publication->file) {
-                $filepath = public_path().DIRECTORY_SEPARATOR.'publications'. DIRECTORY_SEPARATOR . $publication->file;
-                try {
-                    File::delete($filepath);
+              } catch (FileNotFoundException $e) {
+                  // File sudah dihapus/tidak ada
+              }
+          }
 
-                } catch (FileNotFoundException $e) {
-                    // File sudah dihapus/tidak ada
-                }
-            }
+          Session::flash("flash_notification", [
+              "level"=>"danger",
+              "message"=>"Publication '".$pub->title."' Deleted"
+          ]);
 
-            Session::flash("flash_notification", [
-                "level"=>"danger",
-                "message"=>"Publication Deleted"
-            ]);
+        } else {
+          DB::table('publication_user')->where('publication_id',$id)->where('user_id',Auth::id())->delete();
+
+          Session::flash("flash_notification", [
+              "level"=>"danger",
+              "message"=>"You are deleted from author of Publication '".$publication->title."'"
+          ]);
 
         }
 

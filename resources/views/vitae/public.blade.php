@@ -43,8 +43,11 @@
 				</div>
 				<div class="panel-body">
 
-				<h4 align="center">{{ $data['name'] }}</h4>
-				<p align="center">{{ $data['role'] }}</p>
+        <div align="center">
+          <img align="center" src="{{ url('/photo/'.$data['id']) }}" width="150">
+  				<h4 align="center">{{ $data['name'] }}</h4>
+  				<p align="center">{{ $data['role'] }}</p>
+        </center>
 
         <hr>
 				<table>
