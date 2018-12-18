@@ -66,12 +66,6 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td><b>Phone</b></td>
-						<td> : </td>
-						<td>{{ $data['phone'] }}</td>
-					</tr>
-					<tr>
-						<td></td>
 						<td><b>e-mail</b></td>
 						<td> : </td>
             <td>{{ $data['email'] }}</td>
