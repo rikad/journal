@@ -80,7 +80,7 @@ foreach ($publications as $value) {
     <hr>
     <div class="row">
       <div class="col-md-12 footer">
-        &copy; 2018 Sistem Informasi Journal & Publikasi
+        &copy; 2018 CV Dosen FTI
         <br>Fakultas Teknologi Industri - Institut Teknologi Bandung
         <br>Contact For Report & Bugs : rikadfauzi@gmail.com
       </div>

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Data Journal & Profile</title>
+    <title>CV Dosen FTI</title>
 
     <!-- Styles -->
     <link href="/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">Sistem Informasi Journal & Publikasi</a>
+                    <a class="navbar-brand" href="{{ url('/') }}">CV Dosen FTI</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
