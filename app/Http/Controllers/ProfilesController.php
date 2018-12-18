@@ -35,7 +35,7 @@ class ProfilesController extends Controller
     public function validationLogin($id=false){
 
         $data = [
-            'name' => 'nullable|unique:users',
+            'username' => 'nullable|unique:users',
             'email' => 'nullable|unique:users',
             'password' => 'nullable|min:6'
         ];
