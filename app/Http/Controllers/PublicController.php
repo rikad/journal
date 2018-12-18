@@ -96,18 +96,18 @@ class PublicController extends Controller
 
         $output['publications'] = [];
         foreach ($publications as $value) {
-						$relation = DB::table('publication_user')->select('users.name','users.email','profiles.name as fullname')
+						$relation = DB::table('publication_user')->select('users.id','users.name','users.email','profiles.name as fullname')
                         ->join('users','users.id','publication_user.user_id')
 												->leftJoin('profiles','users.id','profiles.user_id')
                         ->where('publication_id',$value->id)
                         ->where('users.id','<>',Auth::id())->get();
             $users = [];
             foreach ($relation as $k => $v) {
-							if ($v->fullname) {
-								$users[] = $v->fullname;
-							} else {
-								$users[] = $v->name;
-							}
+              if ($v->fullname) {
+                $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->fullname).'</a>';
+              } else {
+                $users[] = '<a href="'.url('/dosen/'.$v->id).'">'.e($v->name).'</a>';
+              }
             }
 
             $output['publications'][] = ['id'=>$value->id,'title'=>$value->title,'authors'=>$value->authors,'description'=>$value->description,'file'=>$value->file,'published'=>$value->published,'users'=>$users ];

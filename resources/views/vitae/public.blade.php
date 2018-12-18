@@ -249,7 +249,7 @@
                   $tmp = $authors.', '.$publication['title'].', '.$publication['description'];
                   $publications[] = ['title' => $tmp];
                 @endphp
-                <li>{{ $tmp }}</li>
+                <li>{!! $tmp !!}</li>
 								@endforeach
 							@else
 								-
