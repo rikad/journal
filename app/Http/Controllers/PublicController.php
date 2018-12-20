@@ -184,7 +184,7 @@ class PublicController extends Controller
         if (file_exists($path)) {
             return response()->file($path);
         } else {
-            return response()->file(public_path() . '/image/avatar.jpg');
+            return response()->file(public_path() . '/image/avatar.png');
         }
     }
 
